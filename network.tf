@@ -9,8 +9,6 @@ resource "aws_subnet" "example_subnet" {
   tags = {
     Name = "ExampleVPC-Subnet"
   }
-
-  # depends_on = [aws_internet_gateway.example_igw]
 }
 
 data "aws_subnet_ids" "example_subnets" {
@@ -40,10 +38,6 @@ resource "aws_route_table" "example_crt" {
 }
 
 resource "aws_route_table_association" "example_crta_subnet" {
-  # depends_on = [aws_subnet.example_subnet]
-  # for_each = toset(aws_subnet.example_subnet.*.id)
-  # subnet_id = aws_subnet.example_subnet[each.key].id
-
   count = length(aws_subnet.example_subnet)
   subnet_id = aws_subnet.example_subnet[count.index].id
   route_table_id = aws_route_table.example_crt.id

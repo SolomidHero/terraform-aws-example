@@ -2,9 +2,7 @@
 resource "aws_lb" "example_lb" {
   name = "Example-LoadBalancer"
   security_groups    = [aws_security_group.example_sgp.id]
-  # subnets            = data.aws_subnet_ids.example_subnets.ids
   subnets            = aws_subnet.example_subnet.*.id
-  # subnets            = [aws_instance.nginx_server.subnet_id, aws_instance.apache_server.subnet_id]
   load_balancer_type = "application"
 }
 
@@ -14,10 +12,6 @@ resource "aws_lb_listener" "example_lb_listener" {
   port              = 80
   protocol          = "HTTP"
 
-  # default_action {
-  #   target_group_arn = aws_lb_target_group.example_lb_tg.id
-  #   type             = "forward"
-  # }
   default_action {
     type = "fixed-response"
 
@@ -69,7 +63,6 @@ locals {
 }
 
 resource "aws_lb_target_group_attachment" "example_lb_tga" {
-  # depends_on = [aws_instance.nginx_server.id, aws_instance.apache_server.id]
   count = length(local.instances)
 
   target_group_arn = aws_lb_target_group.example_lb_tg.arn

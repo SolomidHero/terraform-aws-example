@@ -35,9 +35,7 @@ data "aws_ami" "ubuntu" {
     name   = "virtualization-type"
     values = ["hvm"]
   }
-
 }
-
 
 resource "aws_instance" "nginx_server" {
   ami           = data.aws_ami.ubuntu.id
@@ -46,14 +44,12 @@ resource "aws_instance" "nginx_server" {
   # VPC association
   subnet_id = aws_subnet.example_subnet[0].id
   vpc_security_group_ids = [aws_security_group.example_sgp.id]
-  # associate_public_ip_address = true
 
   # nginx installation
   user_data = file("nginx.sh")
 
   tags = {
-    # Terraform   = "true"
-    # Environment = "dev"
+    Environment = "production"
     Name        = "NginxServer"
   }
 }
@@ -70,8 +66,7 @@ resource "aws_instance" "apache_server" {
   user_data = file("apache.sh")
 
   tags = {
-    # Terraform   = "true"
-    # Environment = "dev"
+    Environment = "production"
     Name        = "ApacheServer"
   }
 }
